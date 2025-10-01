@@ -2,6 +2,16 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import rateLimit from "express-rate-limit";
+
+// Limit repeated login attempts to prevent brute-force and DoS attacks
+const loginLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // limit to 5 requests per window per IP
+  message: { success: false, error: "Too many login attempts. Please try again later." },
+  standardHeaders: true, // Return rate limit info in the headers
+  legacyHeaders: false,
+});
 
 const router = express.Router();
 
@@ -16,7 +26,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", loginLimiter, async (req, res) => {
   const { username, password } = req.body;
   // Ensure username is a string to prevent NoSQL injection
   if (typeof username !== "string") {
