@@ -6,6 +6,8 @@ on:
 
 jobs:
   build-backend:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -19,6 +21,8 @@ jobs:
       - run: npm test
 
   build-frontend:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     defaults:
       run:
