@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function Game() {
   const { id } = useParams();
   const [game, setGame] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/games/${id}`).then((res) => setGame(res.data));
+    axios.get(`${API_URL}/api/games/${id}`).then((res) => setGame(res.data));
   }, [id]);
 
   if (!game) return <div>Loading...</div>;

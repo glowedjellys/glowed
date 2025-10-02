@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function Home() {
   const [games, setGames] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/games").then((res) => setGames(res.data));
+    axios.get(`${API_URL}/api/games`).then((res) => setGames(res.data));
   }, []);
 
   return (
