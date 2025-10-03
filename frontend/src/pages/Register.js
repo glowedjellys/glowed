@@ -2,7 +2,24 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
-const API_URL = process.env.REACT_APP_API_URL;
+// Securely allowlist permitted API endpoints to prevent SSRF
+const ALLOWED_API_URLS = [
+  "https://api.example.com",
+  "https://dev-api.example.com",
+  "http://localhost:4000"
+];
+
+function getSafeApiUrl(envUrl) {
+  // Ensure URL matches an allowed base domain
+  if (ALLOWED_API_URLS.includes(envUrl)) {
+    return envUrl;
+  }
+  // Optionally: throw error or use default safe value
+  // throw new Error("Invalid API URL configuration");
+  return ALLOWED_API_URLS[0];
+}
+
+const API_URL = getSafeApiUrl(process.env.REACT_APP_API_URL);
 
 export default function Register() {
   const [username, setUsername] = useState("");
